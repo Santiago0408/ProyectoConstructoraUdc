@@ -1,9 +1,20 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
-import {Proyecto} from './proyecto.model';
+import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Cliente} from './cliente.model';
+import {Proyecto} from './proyecto.model';
 import {User} from './user.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_pais_id: {
+        name: 'fk_pais_id',
+        entity: 'Pais',
+        entityKey: 'id',
+        foreignKey: 'paisId'
+      }
+    },
+  }
+})
 export class Ciudad extends Entity {
   @property({
     type: 'number',
