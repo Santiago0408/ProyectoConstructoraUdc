@@ -9,7 +9,7 @@ const config = {
   port: 27017,
   user: '',
   password: '',
-  database: 'ConstructoraFE',
+  database: 'ConstructoraDB',
   useNewUrlParser: true
 };
 

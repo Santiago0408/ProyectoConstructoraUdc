@@ -11,3 +11,4 @@ export * from './ciudad-cliente.controller';
 export * from './cliente-info-financiera.controller';
 export * from './ciudad-user.controller';
 export * from './tipo-usuario-login.controller';
+export * from './login.controller';
