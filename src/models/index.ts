@@ -10,3 +10,5 @@ export * from './proyecto.model';
 export * from './solicitud.model';
 export * from './user.model';
 
+export * from './login.model';
+export * from './tipo-usuario.model';
