@@ -7,7 +7,7 @@ export class Login extends Entity {
     id: true,
     generated: true,
   })
-  _id?: String;
+  _id?: string;
 
   @property({
     type: 'number',
@@ -21,6 +21,10 @@ export class Login extends Entity {
   })
   clave: string;
 
+  @property({
+    type: 'string',
+  })
+  tipoUsuarioId?: string;
 
   constructor(data?: Partial<Login>) {
     super(data);
