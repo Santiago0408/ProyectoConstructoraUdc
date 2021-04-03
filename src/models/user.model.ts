@@ -43,6 +43,10 @@ export class User extends Entity {
   })
   rol: number;
 
+  @property({
+    type: 'number',
+  })
+  ciudadId?: number;
 
   constructor(data?: Partial<User>) {
     super(data);

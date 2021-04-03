@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Solicitud} from './solicitud.model';
 
 @model()
 export class Inmueble extends Entity {
@@ -27,6 +28,13 @@ export class Inmueble extends Entity {
   })
   valor: number;
 
+  @property({
+    type: 'number',
+  })
+  bloqueId?: number;
+
+  @hasMany(() => Solicitud)
+  solicitudes: Solicitud[];
 
   constructor(data?: Partial<Inmueble>) {
     super(data);

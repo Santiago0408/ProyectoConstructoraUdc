@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasOne} from '@loopback/repository';
+import {Pago} from './pago.model';
 
 @model()
 export class Solicitud extends Entity {
@@ -21,6 +22,23 @@ export class Solicitud extends Entity {
   })
   Oferta_economica: number;
 
+  @property({
+    type: 'number',
+  })
+  inmuebleId?: number;
+
+  @property({
+    type: 'number',
+  })
+  estadoId?: number;
+
+  @hasOne(() => Pago)
+  pago: Pago;
+
+  @property({
+    type: 'number',
+  })
+  clienteId?: number;
 
   constructor(data?: Partial<Solicitud>) {
     super(data);

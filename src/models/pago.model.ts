@@ -21,6 +21,10 @@ export class Pago extends Entity {
   })
   valor: number;
 
+  @property({
+    type: 'number',
+  })
+  solicitudId?: number;
 
   constructor(data?: Partial<Pago>) {
     super(data);

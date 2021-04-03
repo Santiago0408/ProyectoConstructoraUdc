@@ -1,4 +1,7 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Proyecto} from './proyecto.model';
+import {Cliente} from './cliente.model';
+import {User} from './user.model';
 
 @model()
 export class Ciudad extends Entity {
@@ -21,6 +24,19 @@ export class Ciudad extends Entity {
   })
   nombre: string;
 
+  @property({
+    type: 'number',
+  })
+  paisId?: number;
+
+  @hasMany(() => Proyecto)
+  proyectos: Proyecto[];
+
+  @hasMany(() => Cliente)
+  clientes: Cliente[];
+
+  @hasMany(() => User)
+  users: User[];
 
   constructor(data?: Partial<Ciudad>) {
     super(data);

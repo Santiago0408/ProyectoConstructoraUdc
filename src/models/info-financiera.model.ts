@@ -51,6 +51,10 @@ export class InfoFinanciera extends Entity {
   })
   tel_ref_personal: string;
 
+  @property({
+    type: 'number',
+  })
+  clienteId?: number;
 
   constructor(data?: Partial<InfoFinanciera>) {
     super(data);
