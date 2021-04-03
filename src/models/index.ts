@@ -1,4 +1,3 @@
-
 export * from './bloque.model';
 export * from './ciudad.model';
 export * from './cliente.model';
