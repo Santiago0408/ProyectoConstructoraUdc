@@ -9,3 +9,5 @@ export * from './pais.repository';
 export * from './proyecto.repository';
 export * from './solicitud.repository';
 export * from './user.repository';
+export * from './login.repository';
+export * from './tipo-usuario.repository';
