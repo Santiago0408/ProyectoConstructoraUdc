@@ -4,11 +4,12 @@ export * from './cliente.model';
 export * from './estado.model';
 export * from './info-financiera.model';
 export * from './inmueble.model';
+export * from './login.model';
 export * from './pago.model';
 export * from './pais.model';
 export * from './proyecto.model';
 export * from './solicitud.model';
+export * from './tipo-usuario.model';
 export * from './user.model';
 
-export * from './login.model';
-export * from './tipo-usuario.model';
+
