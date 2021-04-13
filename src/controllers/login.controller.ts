@@ -1,30 +1,38 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
+
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import {Login} from '../models';
 import {LoginRepository} from '../repositories';
+import {FuncionesGeneralesService} from '../services';
 
 export class LoginController {
   constructor(
     @repository(LoginRepository)
-    public loginRepository : LoginRepository,
-  ) {}
+    public loginRepository: LoginRepository,
+    @service(FuncionesGeneralesService)
+    public servicioFunciones: FuncionesGeneralesService
+  ) { }
 
   @post('/logins')
   @response(200, {
@@ -37,13 +45,21 @@ export class LoginController {
         'application/json': {
           schema: getModelSchemaRef(Login, {
             title: 'NewLogin',
-            exclude: ['_id'],
+            exclude: ['id', 'clave'],
           }),
         },
       },
     })
-    login: Omit<Login, '_id'>,
+    login: Omit<Login, 'id'>,
   ): Promise<Login> {
+
+    let claveAleatoria = this.servicioFunciones.GenerarClaveAleatoria();
+    console.log(claveAleatoria);
+
+    let claveCifrada = this.servicioFunciones.CifrarTexto(claveAleatoria);
+    console.log(claveCifrada);
+
+    login.clave = claveCifrada;
     return this.loginRepository.create(login);
   }
 

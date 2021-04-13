@@ -1,16 +1,16 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, HasManyRepositoryFactory} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {DefaultCrudRepository, HasManyRepositoryFactory, repository} from '@loopback/repository';
 import {MongodbdsDataSource} from '../datasources';
-import {TipoUsuario, TipoUsuarioRelations, Login} from '../models';
+import {Login, TipoUsuario, TipoUsuarioRelations} from '../models';
 import {LoginRepository} from './login.repository';
 
 export class TipoUsuarioRepository extends DefaultCrudRepository<
   TipoUsuario,
-  typeof TipoUsuario.prototype._id,
+  typeof TipoUsuario.prototype.id,
   TipoUsuarioRelations
 > {
 
-  public readonly logins: HasManyRepositoryFactory<Login, typeof TipoUsuario.prototype._id>;
+  public readonly logins: HasManyRepositoryFactory<Login, typeof TipoUsuario.prototype.id>;
 
   constructor(
     @inject('datasources.mongodbds') dataSource: MongodbdsDataSource, @repository.getter('LoginRepository') protected loginRepositoryGetter: Getter<LoginRepository>,

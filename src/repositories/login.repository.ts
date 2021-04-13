@@ -5,7 +5,7 @@ import {Login, LoginRelations} from '../models';
 
 export class LoginRepository extends DefaultCrudRepository<
   Login,
-  typeof Login.prototype._id,
+  typeof Login.prototype.id,
   LoginRelations
 > {
   constructor(

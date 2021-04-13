@@ -7,7 +7,7 @@ export class Login extends Entity {
     id: true,
     generated: true,
   })
-  _id?: string;
+  id?: string;
 
   @property({
     type: 'number',
@@ -17,9 +17,8 @@ export class Login extends Entity {
 
   @property({
     type: 'string',
-    required: true,
   })
-  clave: string;
+  clave?: string;
 
   @property({
     type: 'string',
