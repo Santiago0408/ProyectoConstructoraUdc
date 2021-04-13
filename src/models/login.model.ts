@@ -10,10 +10,10 @@ export class Login extends Entity {
   id?: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     required: true,
   })
-  documento: number;
+  correo: string;
 
   @property({
     type: 'string',

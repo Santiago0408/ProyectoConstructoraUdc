@@ -22,16 +22,19 @@ import {
   requestBody,
   response
 } from '@loopback/rest';
+import {keys as llaves} from '../config/keys';
 import {Login} from '../models';
 import {LoginRepository} from '../repositories';
-import {FuncionesGeneralesService} from '../services';
+import {FuncionesGeneralesService, NotificacionesService} from '../services';
 
 export class LoginController {
   constructor(
     @repository(LoginRepository)
     public loginRepository: LoginRepository,
     @service(FuncionesGeneralesService)
-    public servicioFunciones: FuncionesGeneralesService
+    public servicioFunciones: FuncionesGeneralesService,
+    @service(NotificacionesService)
+    public servicioNotificaciones: NotificacionesService
   ) { }
 
   @post('/logins')
@@ -60,7 +63,20 @@ export class LoginController {
     console.log(claveCifrada);
 
     login.clave = claveCifrada;
-    return this.loginRepository.create(login);
+    let usuarioCreado = await this.loginRepository.create(login);
+    if (usuarioCreado) {
+      let contenido = `Hola , buen dia. <br/>
+      <ul>
+        <li> Usuario: ${usuarioCreado.correo} </li>
+        <li> Contraseña: ${claveAleatoria}  </li>
+      </ul>
+
+      Gracias.
+      `;
+      this.servicioNotificaciones.EnviarCorreoElectronico(usuarioCreado.correo, llaves.asuntoNuevoUsuario, contenido);
+    }
+
+    return usuarioCreado;
   }
 
   @get('/logins/count')
