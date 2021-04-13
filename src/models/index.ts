@@ -13,3 +13,4 @@ export * from './tipo-usuario.model';
 export * from './user.model';
 
 
+export * from './credenciales.model';

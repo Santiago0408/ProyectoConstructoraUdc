@@ -9,7 +9,7 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param,
+  getModelSchemaRef, HttpErrors, param,
 
 
   patch, post,
@@ -24,8 +24,9 @@ import {
 } from '@loopback/rest';
 import {keys as llaves} from '../config/keys';
 import {Login} from '../models';
+import {Credenciales} from '../models/credenciales.model';
 import {LoginRepository} from '../repositories';
-import {FuncionesGeneralesService, NotificacionesService} from '../services';
+import {FuncionesGeneralesService, NotificacionesService, SesionService} from '../services';
 
 export class LoginController {
   constructor(
@@ -34,7 +35,9 @@ export class LoginController {
     @service(FuncionesGeneralesService)
     public servicioFunciones: FuncionesGeneralesService,
     @service(NotificacionesService)
-    public servicioNotificaciones: NotificacionesService
+    public servicioNotificaciones: NotificacionesService,
+    @service(SesionService)
+    public serviciosesion: SesionService
   ) { }
 
   @post('/logins')
@@ -70,13 +73,41 @@ export class LoginController {
         <li> Usuario: ${usuarioCreado.correo} </li>
         <li> Contraseña: ${claveAleatoria}  </li>
       </ul>
-
       Gracias.
       `;
       this.servicioNotificaciones.EnviarCorreoElectronico(usuarioCreado.correo, llaves.asuntoNuevoUsuario, contenido);
     }
 
     return usuarioCreado;
+  }
+
+  @post('/identificar-usuario')
+  async validar(
+    @requestBody(
+      {
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Credenciales)
+          }
+        }
+      }
+    )
+    credenciales: Credenciales
+  ): Promise<object> {
+    let usuario = await this.loginRepository.findOne({where: {correo: credenciales.correo, clave: credenciales.clave}});
+    if (usuario) {
+      //generar un token
+      let token = this.serviciosesion.GenerarToken(usuario);
+      return {
+        user: {
+          username: usuario.correo,
+          role: usuario.tipoUsuarioId
+        },
+        tk: token
+      }
+    } else {
+      throw new HttpErrors[401]("Las credenciales no son correctas");
+    }
   }
 
   @get('/logins/count')
