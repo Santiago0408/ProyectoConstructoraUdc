@@ -23,3 +23,4 @@ export * from './tipo-usuario-login.controller';
 export * from './cliente.controller';
 export * from './user.controller';
 export * from './infofinanciera.controller';
+export * from './cargar-archivo.controller';
