@@ -104,7 +104,7 @@ export class LoginController {
           role: usuario.tipoUsuarioId
         },
         tk: token
-      }
+      };
     } else {
       throw new HttpErrors[401]("Las credenciales no son correctas");
     }

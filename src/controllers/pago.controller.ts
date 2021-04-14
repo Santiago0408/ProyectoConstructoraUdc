@@ -1,30 +1,36 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
+
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import {Pago} from '../models';
 import {PagoRepository} from '../repositories';
 
+@authenticate('vend')
 export class PagoController {
   constructor(
     @repository(PagoRepository)
-    public pagoRepository : PagoRepository,
-  ) {}
+    public pagoRepository: PagoRepository,
+  ) { }
 
   @post('/pago')
   @response(200, {
@@ -58,6 +64,7 @@ export class PagoController {
     return this.pagoRepository.count(where);
   }
 
+  @authenticate.skip()
   @get('/pago')
   @response(200, {
     description: 'Array of Pago model instances',
