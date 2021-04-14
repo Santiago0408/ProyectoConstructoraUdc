@@ -23,7 +23,7 @@ import {
   response
 } from '@loopback/rest';
 import {keys as llaves} from '../config/keys';
-import {Login} from '../models';
+import {Login, ResetearClave} from '../models';
 import {Credenciales} from '../models/credenciales.model';
 import {LoginRepository} from '../repositories';
 import {FuncionesGeneralesService, NotificacionesService, SesionService} from '../services';
@@ -79,6 +79,46 @@ export class LoginController {
     }
 
     return usuarioCreado;
+  }
+
+  @post('/reset-password')
+  @response(200, {
+    description: 'Login model instance',
+    content: {'application/json': {schema: getModelSchemaRef(Login)}},
+  })
+  async resetPassword(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(ResetearClave,),
+        },
+      },
+    })
+    resetearClave: ResetearClave,
+  ): Promise<Object> {
+
+    let usuario = await this.loginRepository.findOne({where: {correo: resetearClave.correo}})
+    if (!usuario) {
+      throw new HttpErrors[401]("Este usuario no existe");
+    }
+
+    let claveAleatoria = this.servicioFunciones.GenerarClaveAleatoria();
+    console.log(claveAleatoria);
+
+    let claveCifrada = this.servicioFunciones.CifrarTexto(claveAleatoria);
+    console.log(claveCifrada);
+
+    usuario.clave = claveCifrada;
+    await this.loginRepository.update(usuario);
+
+    let contenido = `Hola , buen dia usted a solicitado una nueva clave twilio, sus datos son:
+      Usuario: ${usuario.correo} y Contraseña: ${claveAleatoria}
+      Gracias.
+      `;
+    this.servicioNotificaciones.EnviarNotificacionesPorSMS(usuario.telefono, contenido);
+    return {
+      envio: "OK. ENVIADOO"
+    };
   }
 
   @post('/identificar-usuario')

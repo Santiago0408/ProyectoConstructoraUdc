@@ -25,6 +25,12 @@ export class Login extends Entity {
   })
   tipoUsuarioId?: string;
 
+  @property({
+    type: 'string',
+    required: true,
+  })
+  telefono: string;
+
   constructor(data?: Partial<Login>) {
     super(data);
   }

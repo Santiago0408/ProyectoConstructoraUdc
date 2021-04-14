@@ -14,3 +14,4 @@ export * from './user.model';
 
 
 export * from './credenciales.model';
+export * from './resetear-clave.model';
