@@ -12,5 +12,5 @@ export namespace keys {
 
   export const carpetaImagenProyecto = '../../archivos/proyecto';
   export const nombreImagenProyecto = 'file';
-  export const extensionesPermitidasDOC: string[] = ['.PDF', '.DOC', '.DOCX', '.XLS', '.XLSX'];
+  export const extensionesPermitidasDOC: string[] = ['.PNG', '.JPG', '.JPEG', '.SVG'];
 }
