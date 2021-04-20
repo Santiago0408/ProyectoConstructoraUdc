@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {service} from '@loopback/core';
 import {
   Count,
@@ -28,6 +29,7 @@ import {Credenciales} from '../models/credenciales.model';
 import {LoginRepository} from '../repositories';
 import {FuncionesGeneralesService, NotificacionesService, SesionService} from '../services';
 
+@authenticate('admin')
 export class LoginController {
   constructor(
     @repository(LoginRepository)
@@ -67,11 +69,23 @@ export class LoginController {
 
     login.clave = claveCifrada;
     let usuarioCreado = await this.loginRepository.create(login);
-    if (usuarioCreado) {
-      let contenido = `Hola , buen dia. <br/>
+    let contenido;
+    if (usuarioCreado && usuarioCreado.tipoUsuarioId === '6068f2c6b4388d860e4e2a3a') {
+      contenido = `Hola , buen dia. <br/>
       <ul>
         <li> Usuario: ${usuarioCreado.correo} </li>
         <li> Contraseña: ${claveAleatoria}  </li>
+        <li> y tu rol es: Administrador  </li>
+      </ul>
+      Gracias.
+      `;
+      this.servicioNotificaciones.EnviarCorreoElectronico(usuarioCreado.correo, llaves.asuntoNuevoUsuario, contenido);
+    } else {
+      contenido = `Hola , buen dia. <br/>
+      <ul>
+        <li> Usuario: ${usuarioCreado.correo} </li>
+        <li> Contraseña: ${claveAleatoria}  </li>
+        <li> y tu rol es: Vendedor  </li>
       </ul>
       Gracias.
       `;

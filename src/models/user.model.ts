@@ -44,9 +44,9 @@ export class User extends Entity {
   correoElectronico?: string;
 
   @property({
-    type: 'number',
+    type: 'string',
   })
-  numCelular?: number;
+  numCelular?: string;
 
   @property({
     type: 'number',
