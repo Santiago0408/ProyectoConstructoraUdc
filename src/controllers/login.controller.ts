@@ -135,6 +135,7 @@ export class LoginController {
     };
   }
 
+  @authenticate.skip()
   @post('/identificar-usuario')
   async validar(
     @requestBody(
