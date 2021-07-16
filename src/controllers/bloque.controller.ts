@@ -52,7 +52,7 @@ export class BloqueController {
   ): Promise<Bloque> {
     return this.bloqueRepository.create(bloque);
   }
-
+  @authenticate.skip()
   @get('/bloque/count')
   @response(200, {
     description: 'Bloque model count',
@@ -101,7 +101,7 @@ export class BloqueController {
   ): Promise<Count> {
     return this.bloqueRepository.updateAll(bloque, where);
   }
-
+  @authenticate.skip()
   @get('/bloque/{id}')
   @response(200, {
     description: 'Bloque model instance',

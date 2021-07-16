@@ -52,7 +52,7 @@ export class ProyectoController {
   ): Promise<Proyecto> {
     return this.proyectoRepository.create(proyecto);
   }
-
+  @authenticate.skip()
   @get('/proyecto/count')
   @response(200, {
     description: 'Proyecto model count',
@@ -101,7 +101,7 @@ export class ProyectoController {
   ): Promise<Count> {
     return this.proyectoRepository.updateAll(proyecto, where);
   }
-
+  @authenticate.skip()
   @get('/proyecto/{id}')
   @response(200, {
     description: 'Proyecto model instance',

@@ -52,7 +52,7 @@ export class InmuebleController {
   ): Promise<Inmueble> {
     return this.inmuebleRepository.create(inmueble);
   }
-
+  @authenticate.skip()
   @get('/inmueble/count')
   @response(200, {
     description: 'Inmueble model count',
@@ -101,7 +101,7 @@ export class InmuebleController {
   ): Promise<Count> {
     return this.inmuebleRepository.updateAll(inmueble, where);
   }
-
+  @authenticate.skip()
   @get('/inmueble/{id}')
   @response(200, {
     description: 'Inmueble model instance',

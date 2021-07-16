@@ -52,7 +52,7 @@ export class CiudadController {
   ): Promise<Ciudad> {
     return this.ciudadRepository.create(ciudad);
   }
-
+  @authenticate.skip()
   @get('/ciudad/count')
   @response(200, {
     description: 'Ciudad model count',
@@ -101,7 +101,7 @@ export class CiudadController {
   ): Promise<Count> {
     return this.ciudadRepository.updateAll(ciudad, where);
   }
-
+  @authenticate.skip()
   @get('/ciudad/{id}')
   @response(200, {
     description: 'Ciudad model instance',
