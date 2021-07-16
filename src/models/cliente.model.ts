@@ -41,7 +41,7 @@ export class Cliente extends Entity {
   apellido: string;
 
   @property({
-    type: 'date',
+    type: 'string',
     required: true,
   })
   fechaNacimiento: string;
