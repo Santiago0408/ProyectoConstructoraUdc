@@ -9,7 +9,7 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param,
+  getModelSchemaRef, HttpErrors, param,
 
 
   patch, post,
@@ -22,7 +22,7 @@ import {
   requestBody,
   response
 } from '@loopback/rest';
-import {User} from '../models';
+import {Correo, User} from '../models';
 import {UserRepository} from '../repositories';
 
 @authenticate('admin')
@@ -154,4 +154,35 @@ export class UserController {
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.userRepository.deleteById(id);
   }
+
+  @authenticate.skip()
+  @get('/Cliente/correo-electronico/{correo}')
+  @response(200, {
+    description: 'Cliente model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Correo, {includeRelations: true}),
+      },
+    },
+  })
+  async findOne(
+    @param.path.string('correo') correo: Correo,
+    @param.filter(Correo, {exclude: 'where'}) filter?: FilterExcludingWhere<Correo>
+  ): Promise<object> {
+    let usuario = await this.userRepository.findOne({where: {correoElectronico: String(correo)}});
+    if (usuario) {
+      return {
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        documento: usuario.documento,
+        correoElectronico: usuario.correoElectronico,
+        numCelular: usuario.numCelular,
+        rol: usuario.rol,
+        ciudadId: usuario.ciudadId,
+      };
+    } else {
+      throw new HttpErrors[401]("El correo no es correcto");
+    }
+  }
+
 }
