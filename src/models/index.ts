@@ -15,3 +15,5 @@ export * from './user.model';
 
 export * from './credenciales.model';
 export * from './resetear-clave.model';
+export * from './correo.model';
+export * from './cambiarcontrasena.model';

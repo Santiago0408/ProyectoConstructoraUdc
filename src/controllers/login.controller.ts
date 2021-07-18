@@ -24,7 +24,7 @@ import {
   response
 } from '@loopback/rest';
 import {keys as llaves} from '../config/keys';
-import {Login, ResetearClave} from '../models';
+import {Cambiarcontrasena, Login, ResetearClave} from '../models';
 import {Credenciales} from '../models/credenciales.model';
 import {LoginRepository} from '../repositories';
 import {FuncionesGeneralesService, NotificacionesService, SesionService} from '../services';
@@ -94,7 +94,7 @@ export class LoginController {
 
     return usuarioCreado;
   }
-
+  @authenticate.skip()
   @post('/reset-password')
   @response(200, {
     description: 'Login model instance',
@@ -135,6 +135,47 @@ export class LoginController {
     };
   }
 
+  @post('/change-password')
+  @response(200, {
+    description: 'Login model instance',
+    content: {'application/json': {schema: getModelSchemaRef(Cambiarcontrasena)}},
+  })
+  async changePassword(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Cambiarcontrasena,),
+        },
+      },
+    })
+    cambiarContraseña: Cambiarcontrasena,
+  ): Promise<Object> {
+
+    let claveCifradaAntigua = this.servicioFunciones.CifrarTexto(cambiarContraseña.oldPassword);
+    let usuario = await this.loginRepository.findOne({where: {clave: claveCifradaAntigua}})
+
+    if (!usuario) {
+      throw new HttpErrors[401]("Este usuario no existe");
+    }
+
+    let claveCifradaNueva = this.servicioFunciones.CifrarTexto(cambiarContraseña.newPassword);
+    console.log(claveCifradaNueva);
+
+    usuario.clave = claveCifradaNueva;
+    await this.loginRepository.update(usuario);
+    let contenido = `Hola , buen dia usted a solicitado una nueva clave twilio, sus datos son:
+          Usuario: ${usuario.correo} y Contraseña: ${cambiarContraseña.newPassword}
+          Gracias.
+          `;
+    this.servicioNotificaciones.EnviarNotificacionesPorSMS(usuario.telefono, contenido);
+
+    return {
+      envio: "OK cambiada"
+    };
+
+
+  }
+
   @authenticate.skip()
   @post('/identificar-usuario')
   async validar(
@@ -158,6 +199,7 @@ export class LoginController {
           username: usuario.correo,
           role: usuario.tipoUsuarioId
         },
+        username: usuario.correo,
         tk: token,
         role: usuario.tipoUsuarioId
       };
@@ -165,7 +207,7 @@ export class LoginController {
       throw new HttpErrors[401]("Las credenciales no son correctas");
     }
   }
-
+  @authenticate.skip()
   @get('/logins/count')
   @response(200, {
     description: 'Login model count',
@@ -176,7 +218,7 @@ export class LoginController {
   ): Promise<Count> {
     return this.loginRepository.count(where);
   }
-
+  @authenticate.skip()
   @get('/logins')
   @response(200, {
     description: 'Array of Login model instances',
@@ -213,7 +255,7 @@ export class LoginController {
   ): Promise<Count> {
     return this.loginRepository.updateAll(login, where);
   }
-
+  @authenticate.skip()
   @get('/logins/{id}')
   @response(200, {
     description: 'Login model instance',

@@ -9,7 +9,7 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param,
+  getModelSchemaRef, HttpErrors, param,
 
 
   patch, post,
@@ -22,7 +22,7 @@ import {
   requestBody,
   response
 } from '@loopback/rest';
-import {Cliente} from '../models';
+import {Cliente, Correo} from '../models';
 import {ClienteRepository} from '../repositories';
 
 //@authenticate('vend')
@@ -52,7 +52,7 @@ export class ClienteController {
   ): Promise<Cliente> {
     return this.clienteRepository.create(cliente);
   }
-
+  @authenticate.skip()
   @get('/cliente/count')
   @response(200, {
     description: 'Cliente model count',
@@ -154,4 +154,38 @@ export class ClienteController {
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.clienteRepository.deleteById(id);
   }
+
+  @get('/Cliente/correo-electronico/{correo}')
+  @response(200, {
+    description: 'Cliente model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Correo, {includeRelations: true}),
+      },
+    },
+  })
+  async findOne(
+    @param.path.string('correo') correo: Correo,
+    @param.filter(Correo, {exclude: 'where'}) filter?: FilterExcludingWhere<Correo>
+  ): Promise<object> {
+    let usuario = await this.clienteRepository.findOne({where: {correoElectronico: correo.correo}});
+    if (usuario) {
+      return {
+        documento: usuario.documento,
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        fechaNacimiento: usuario.fechaNacimiento,
+        foto: usuario.foto,
+        numCelular: usuario.numCelular,
+        correoElectronico: usuario.correoElectronico,
+        direccion: usuario.direccion,
+        ciudadId: usuario.ciudadId
+      };
+    } else {
+      throw new HttpErrors[401]("El correo no es correcto");
+    }
+  }
+
+
+
 }
