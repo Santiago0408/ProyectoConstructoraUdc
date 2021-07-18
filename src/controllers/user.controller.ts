@@ -156,7 +156,7 @@ export class UserController {
   }
 
   @authenticate.skip()
-  @get('/Cliente/correo-electronico/{correo}')
+  @get('/User/correo-electronico/{correo}')
   @response(200, {
     description: 'Cliente model instance',
     content: {
