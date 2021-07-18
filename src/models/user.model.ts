@@ -49,10 +49,10 @@ export class User extends Entity {
   numCelular?: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     required: true,
   })
-  rol: number;
+  rol: String;
 
   @property({
     type: 'number',
