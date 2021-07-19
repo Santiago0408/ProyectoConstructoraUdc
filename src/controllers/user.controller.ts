@@ -169,7 +169,6 @@ export class UserController {
     @param.path.string('correo') correo: Correo,
     @param.filter(Correo, {exclude: 'where'}) filter?: FilterExcludingWhere<Correo>
   ): Promise<object> {
-
     let usuario = await this.userRepository.findOne({where: {correoElectronico: String(correo)}});
     if (usuario) {
       return {
@@ -185,7 +184,5 @@ export class UserController {
       throw new HttpErrors[401]("El correo no es correcto");
     }
   }
-
-
 
 }
