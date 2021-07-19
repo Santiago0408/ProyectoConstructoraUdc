@@ -33,7 +33,7 @@ export class InfoFinanciera extends Entity {
   datos_trabajo: string;
 
   @property({
-    type: 'date',
+    type: 'string',
     required: true,
   })
   tiempo_trabajo_actual: string;
