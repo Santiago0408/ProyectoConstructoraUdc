@@ -3,7 +3,7 @@ import {
   CountSchema,
   Filter,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -13,11 +13,11 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {
   Inmueble,
-  Solicitud,
+  Solicitud
 } from '../models';
 import {InmuebleRepository} from '../repositories';
 
@@ -38,10 +38,12 @@ export class InmuebleSolicitudController {
       },
     },
   })
+
   async find(
     @param.path.number('id') id: number,
     @param.query.object('filter') filter?: Filter<Solicitud>,
   ): Promise<Solicitud[]> {
+    console.log("entrooooooooooooo")
     return this.inmuebleRepository.solicitudes(id).find(filter);
   }
 
