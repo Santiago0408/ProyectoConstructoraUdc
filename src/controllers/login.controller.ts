@@ -163,7 +163,7 @@ export class LoginController {
 
     usuario.clave = claveCifradaNueva;
     await this.loginRepository.update(usuario);
-    let contenido = `Hola , buen dia usted a solicitado una nueva clave twilio, sus datos son:
+    let contenido = `Hola , buen dia usted a cambiado su clave twilio, sus datos son:
           Usuario: ${usuario.correo} y Contraseña: ${cambiarContraseña.newPassword}
           Gracias.
           `;

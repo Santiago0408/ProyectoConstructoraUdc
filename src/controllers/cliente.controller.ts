@@ -1,4 +1,5 @@
 import {authenticate} from '@loopback/authentication';
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
@@ -9,7 +10,7 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param,
+  getModelSchemaRef, HttpErrors, param,
 
 
   patch, post,
@@ -22,14 +23,17 @@ import {
   requestBody,
   response
 } from '@loopback/rest';
-import {Cliente} from '../models';
+import {Cliente, NotificarSolicitud} from '../models';
 import {ClienteRepository} from '../repositories';
+import {NotificacionesService} from '../services';
 
 //@authenticate('vend')
 export class ClienteController {
   constructor(
     @repository(ClienteRepository)
     public clienteRepository: ClienteRepository,
+    @service(NotificacionesService)
+    public servicioNotificaciones: NotificacionesService,
   ) { }
 
   @post('/cliente')
@@ -50,6 +54,7 @@ export class ClienteController {
     })
     cliente: Omit<Cliente, 'id'>,
   ): Promise<Cliente> {
+    console.log(cliente);
     return this.clienteRepository.create(cliente);
   }
   @authenticate.skip()
@@ -154,6 +159,46 @@ export class ClienteController {
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.clienteRepository.deleteById(id);
   }
+
+
+
+  @post('/cliente/notificacionSolicitud')
+  @response(200, {
+    description: 'Login model instance',
+    content: {'application/json': {schema: getModelSchemaRef(NotificarSolicitud)}},
+  })
+  async changePassword(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(NotificarSolicitud,),
+        },
+      },
+    })
+    cliente: NotificarSolicitud,
+  ): Promise<Object> {
+
+    console.log(cliente)
+    if (!cliente) {
+      throw new HttpErrors[401]("Este usuario no existe");
+    }
+
+    if (cliente.estado == 2) {
+      let contenido = `Hola , estimado cliente  ${cliente.nombre} ${cliente.apellido} su Solicitud a sido Aceptada!!!`;
+      this.servicioNotificaciones.EnviarNotificacionesPorSMS(cliente.numCelular, contenido);
+      this.servicioNotificaciones.EnviarCorreoElectronico(cliente.correoElectronico, "Solicitud", contenido);
+    } else if (cliente.estado == 3) {
+      let contenido = `Hola , estimado cliente ${cliente.nombre} ${cliente.apellido} su Solicitud a sido Rechazada`;
+      this.servicioNotificaciones.EnviarNotificacionesPorSMS(cliente.numCelular, contenido);
+      this.servicioNotificaciones.EnviarCorreoElectronico(cliente.correoElectronico, "Solicitud", contenido);
+    }
+    return {
+      envio: "OK Enviado"
+    };
+
+
+  }
+
 
 
 
