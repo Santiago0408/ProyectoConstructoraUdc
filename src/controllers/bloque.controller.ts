@@ -25,7 +25,7 @@ import {
 import {Bloque} from '../models';
 import {BloqueRepository} from '../repositories';
 
-@authenticate('admin')
+//@authenticate('vend')
 export class BloqueController {
   constructor(
     @repository(BloqueRepository)
