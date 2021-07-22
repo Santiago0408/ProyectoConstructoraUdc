@@ -25,7 +25,7 @@ import {
 import {Inmueble} from '../models';
 import {InmuebleRepository} from '../repositories';
 
-@authenticate('admin')
+//@authenticate('vend')
 export class InmuebleController {
   constructor(
     @repository(InmuebleRepository)

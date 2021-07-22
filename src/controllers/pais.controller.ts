@@ -31,7 +31,7 @@ export class PaisController {
     @repository(PaisRepository)
     public paisRepository: PaisRepository,
   ) { }
-  @authenticate('admin')
+  //  @authenticate('vend')
   @post('/pais')
   @response(200, {
     description: 'Pais model instance',
