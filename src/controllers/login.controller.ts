@@ -135,6 +135,7 @@ export class LoginController {
     };
   }
 
+  @authenticate.skip()
   @post('/change-password')
   @response(200, {
     description: 'Login model instance',
